@@ -24,6 +24,11 @@ public class UserServiceTest {
 	public void testConfig() {
 		assertThat(userService, notNullValue()); //null이 아닌지 확인
 	}
+	@Test
+	public void testDetailUser() {
+		
+	}
+	
 	@Test(expected=SimpleBoardException.class) //SimpleBoardException 예외발생하는지 test
 	public void testDuplicateUserAdd() {
 		User user = new User();
