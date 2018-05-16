@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+
+	<mvc:annotation-driven>
+		<mvc:argument-resolvers>
+			<bean class="kr.co.hta.board.web.resolvers.LoginUserHandlerMethodArgumentResolver" />
+		</mvc:argument-resolvers>
+	</mvc:annotation-driven>
+	<context:component-scan base-package="kr.co.hta.board.web" />
+	<!-- 인터셉터 정의  -->
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/**"/> <!-- 모든 url 요청 -->
+			<bean class="kr.co.hta.board.web.interceptors.LoginCheckInterceptor">
+				<property name="urls">
+					<set> <!-- 로그인 없이 들어갈 수 있는 url설정 -->
+						<value>/home.do</value>
+						<value>/user/form.do</value>
+						<value>/user/register.do</value>
+						<value>/user/login.do</value>
+						<value>/user/logout.do</value>
+					</set>
+				</property>
+			</bean>
+		</mvc:interceptor>
+	</mvc:interceptors>
+	
+	<bean class="kr.co.hta.board.web.views.DownloadView" />
+	
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="defaultEncoding" value="utf-8" />
+		<property name="maxUploadSize" value="10485760" />
+	</bean>
+	
+	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/views/" />
+	</bean>
+	
+	
+</beans>

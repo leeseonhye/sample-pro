@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 무조건 dao 인터페이스 경로를 적어야함 -->
+<mapper namespace="kr.co.hta.board.dao.BookDao">
+
+	<resultMap type="Book" id="BookMap">
+		<id property="no" column="book_no"/>
+		<result property="title" column="book_title"/>
+		<result property="author" column="book_author"/>
+		<result property="publisher" column="book_publisher"/>
+		<result property="mainCategory" column="main_cartegory"/>
+		<result property="subCategory" column="sub_category"/>
+		<result property="fixedPrice" column="fixed_price"/>
+		<result property="discountRate" column="discount_rate"/>
+		<result property="status" column="book_out_status"/>
+	</resultMap>
+	
+	<!-- 도서 검색 -->
+	<select id="searchBooks" parameterType="Criteria" resultMap="BookMap">
+		select
+			*
+		from
+			book
+		<include refid="search_sql"></include>
+	</select>
+	
+	<!-- 반복되는 <where>문 sql로 지정 
+	      사용할 sql문에 <include>로 넣는다. -->
+	<sql id="search_sql">
+		<where>
+			<if test="title != ''">
+				book_title like '%'||#{title}||'%'
+			</if>
+			<if test="author != ''">
+				and book_author like '%'||#{author}||'%'
+			</if>
+			<if test="publisher != ''">
+				and book_publisher like '%'||#{publisher}||'%'
+			</if>
+			<if test="minPrice != null">
+				and fixed_price >= #{minPrice}
+			</if>
+			<if test="maxPrice != null">
+				and fixed_price &lt;= #{maxPrice}
+			</if>
+			<if test="status != null">
+				and book_out_status = #{status}
+			</if>
+			<if test="categories != null">
+				and main_cartegory in
+				<foreach item="item" index="index" collection="categories"
+					open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+		</where>
+	</sql>
+	
+</mapper>

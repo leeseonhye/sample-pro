@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+
+	<!-- root스프링 컨테이너 생산하는 설정 -->
+		<context-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>/WEB-INF/spring/root-context.xml</param-value>
+		</context-param>
+		<listener>
+			<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+		</listener>
+	
+	
+
+	<!-- 웹과 관련된 app-servlet으로 dispatcherServlet 컨테이너 생산하는 설정 -->
+		<servlet>
+			<servlet-name>appServlet</servlet-name>
+			<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+			<init-param>
+				<param-name>contextConfigLocation</param-name>
+				<param-value>/WEB-INF/spring/app-servlet.xml</param-value>
+			</init-param>
+			<load-on-startup>1</load-on-startup>
+		</servlet>	
+		<servlet-mapping>
+			<servlet-name>appServlet</servlet-name>
+			<url-pattern>*.do</url-pattern>
+		</servlet-mapping>
+
+	<!-- 모든 요청 올 때마다 encoding 필터 실행하여 utf-8실행 -->
+		<filter>
+			<filter-name>encodingFilter</filter-name>
+			<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+			<init-param>
+				<param-name>encoding</param-name>
+				<param-value>UTF-8</param-value>
+			</init-param>
+			<init-param>
+				<param-name>forceEncoding</param-name>
+				<param-value>true</param-value>
+			</init-param>
+		</filter>
+		<filter-mapping>
+			<filter-name>encodingFilter</filter-name>
+			<url-pattern>/*</url-pattern>
+		</filter-mapping>
+		
+		
+	<!-- jsp로 끝나는 url에 첫부분에 '/WEB-INF/include/common.jsp'을 넣어라 명령 -->
+		<jsp-config>
+			<jsp-property-group>
+				<url-pattern>*.jsp</url-pattern>
+				<include-prelude>/WEB-INF/include/common.jsp</include-prelude>
+			</jsp-property-group>
+		</jsp-config>
+		
+	<!-- 404에러발생 시 처리 명령 -->
+		<error-page>
+			<error-code>404</error-code>
+			<location>/WEB-INF/views/error/404.jsp</location>
+		</error-page>
+</web-app>

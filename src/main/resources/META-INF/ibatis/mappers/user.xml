@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+    
+<sqlMap namespace="user" >
+	<typeAlias alias="User" type="kr.co.hta.board.vo.User"/>
+	
+	<insert id="addUser" parameterClass="User">
+		insert into simple_board_user
+		(user_id, user_pwd, user_name, create_date)
+		values
+		(#id#, #pwd#, #name#, sysdate)
+	</insert>
+	
+	<select id="getUserById" parameterClass="string" resultClass="User">
+		select
+			user_id as id,
+			user_pwd as pwd,
+			user_name as name,
+			create_date as createDate
+		from
+			simple_board_user
+		where
+			user_id = #value#
+	</select>
+	
+	<select id="searchUsers" parameterClass="string" resultClass="User">
+		select
+			user_id as id,
+			user_pwd as pwd,
+			user_name as name,
+			create_date as createDate
+		from
+			simple_board_user
+		where
+			user_id = #value#
+	</select>
+</sqlMap>
